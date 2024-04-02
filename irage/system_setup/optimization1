@@ -1,0 +1,46 @@
+#!/usr/bin/python
+
+import subprocess
+# from colorama import Fore, Style
+
+class Optimization:
+    def __init__(self):
+        # Assuming your file is named 'commands_file.txt'
+        file_path = 'optimize.sh'
+
+        # List to store commands that didn't run successfully
+        failed_commands = []
+        check = 0
+
+        # Open the file and read each line
+        with open(file_path, 'r') as file:
+            for line in file:
+                # Skip commented lines (lines starting with '#')
+                if line.strip().startswith('#'):
+                    continue
+
+                # Process each non-commented line as a command
+                rhel_command = line.strip()
+                print("Executing command:{}".format(rhel_command))
+
+                # Execute the RHEL command using subprocess
+                try:
+                    subprocess.check_call(rhel_command, shell=True)
+                except subprocess.CalledProcessError:
+                    # Command execution failed
+                    print("Command failed:{}".format(rhel_command))
+                    failed_commands.append(rhel_command)
+                    # check += 1
+                    # print("\n{}".format(check))
+                    print("-------------------------------")
+
+        # Print the commands that didn't run successfully
+        # print("\nfailed: {}".format(check))
+        if failed_commands:
+            print("\nCommands that failed:")
+            for command in failed_commands:
+                print("{}".format(command))
+        else:
+            print("\nAll commands ran successfully.")
+
+obj = Optimization()
